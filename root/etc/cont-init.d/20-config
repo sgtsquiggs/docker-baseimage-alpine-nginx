@@ -2,17 +2,25 @@
 
 # make our folders
 mkdir -p \
-    /config/{nginx/site-confs,www,log/nginx,keys} \
+    /config/{nginx/site-confs,www,log/nginx,keys,php,log/php} \
     /run \
     /var/lib/nginx/tmp/client_body
 
-# copy config files
+# copy default files
 [[ ! -f /config/nginx/nginx.conf ]] && \
     cp /defaults/nginx.conf /config/nginx/nginx.conf
 [[ ! -f /config/nginx/site-confs/default ]] && \
     cp /defaults/default /config/nginx/site-confs/default
 [[ $(find /config/www -type f | wc -l) -eq 0 ]] && \
     cp /defaults/index.html /config/www/index.html
+[[ ! -f /config/nginx/php-fpm.conf ]] && \
+    cp /defaults/php-fpm.conf /config/nginx/php-fpm.conf
+
+# link config files
+cp /config/nginx/php-fpm.conf /etc/php5/php-fpm.conf
+
+# fix timezone in php.ini
+sed -i "s#date.timezone = .*#date.timezone = $TZ#g" /etc/php5/php.ini
 
 # permissions
 chown -R abc:abc \

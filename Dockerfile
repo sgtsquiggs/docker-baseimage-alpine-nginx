@@ -8,10 +8,14 @@ RUN \
         git \
         logrotate \
         nginx \
-        openssl &&\
+        openssl \
+        php5 \
+        php5-fpm \
+        php5-openssl \
+        php5-zlib &&\
 
 # configure nginx
-    echo 'fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;' >> \
+    echo 'fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;' >> \
     /etc/nginx/fastcgi_params &&\
     rm -f /etc/nginx/conf.d/default.conf &&\
 
